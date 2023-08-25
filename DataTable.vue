@@ -7,6 +7,8 @@
 
     import { ref, watch, computed } from 'vue';
 
+    import {SearchIn} from './lib/SearchIn';
+
     const cellWidth = ref<string>('0vw');
     const cWValue = ref<number>(0);
     const arrowNavigation = ref<boolean>(false);
@@ -18,6 +20,44 @@
         to: number
     }
     const pagination = ref<Pagination[]>([]);
+
+    const createPagination = ( array : Object[]) => {
+        pagination.value = [];
+        if (DataTableSchema.perPage) {
+            if(array.length > 1){
+                const p = DataTableSchema.perPage;
+                let i = 0;
+                let ii = -1;
+                for (let index = 0; index < array.length; index++) {
+                    i++;
+                    if (i === p) {
+                        i = 0;
+                        ii++;
+                        pagination.value.push({
+                            from: p * ii,
+                            to: index + 1
+                        })
+                    }
+                }
+                if (pagination.value[pagination.value.length - 1]) {
+                    const last = pagination.value[pagination.value.length - 1].to;
+                    if (array.length !== last) {
+                        const ghosts = array.length - last;
+                        pagination.value.push({
+                            from: array.length - ghosts,
+                            to: array.length
+                        })
+                    }
+                }
+            } else {
+                pagination.value.push({
+                    from: 0,
+                    to: 1
+                })
+            }
+
+        }
+    }
 
 
     watch(
@@ -34,33 +74,7 @@
             cellWidth.value = `${96 / l}vw`;
             cWValue.value = 96 / l;
 
-            if(DataTableSchema.perPage){
-                const p = DataTableSchema.perPage;
-                let i = 0;
-                let ii = -1;
-                for (let index = 0; index < DataTableSchema.tRows.length; index++) {
-                    i++;
-                    if(i === p){
-                        i = 0;
-                        ii++;
-                        pagination.value.push({
-                            from: p * ii,
-                            to: index + 1
-                        })
-                    }
-                }
-                if(pagination.value[pagination.value.length - 1]){
-                    const last = pagination.value[pagination.value.length - 1].to;
-                    if(DataTableSchema.tRows.length !== last){
-                        const ghosts = DataTableSchema.tRows.length - last;
-                        pagination.value.push({
-                            from: DataTableSchema.tRows.length - ghosts,
-                            to: DataTableSchema.tRows.length
-                        })
-                    }
-                }
-                console.log(pagination.value)
-            }
+            createPagination(DataTableSchema.tRows);
 
         }
     )
@@ -94,20 +108,39 @@
     }
 
     const paginationSelect = ref<number>(0);
+    const inputSearch = ref<string>(); 
     const data = computed(() => {
+
         const p = DataTableSchema.perPage;
         if(p){
             const elements : any = [];
-            DataTableSchema.tRows.forEach(element => {
-                elements.push(element);
-            });
+
+            if(inputSearch.value){
+                SearchIn(inputSearch.value, DataTableSchema.tRows)?.forEach(element => {
+                    elements.push(element);
+                });
+                createPagination(elements);
+                setPagination(paginationSelect.value)
+
+            } else {
+                DataTableSchema.tRows.forEach(element => {
+                    elements.push(element);
+                });
+                createPagination(elements);
+                setPagination(paginationSelect.value)
+            }
             return elements.slice(
                 pagination.value[paginationSelect.value].from, 
                 pagination.value[paginationSelect.value].to
             );
         } else {
-            return DataTableSchema.tRows;
+            if(inputSearch.value){
+                return SearchIn(inputSearch.value, DataTableSchema.tRows)
+            } else {
+                return DataTableSchema.tRows;
+            }
         }
+
     });
 
     const setPagination = (n : number) => {
@@ -118,6 +151,14 @@
                 element.setAttribute('style', `transform: translateX(${left.value}vw)`);
             });
         }, 100);
+    }
+
+    const getCount = () => {
+        if(DataTableSchema.perPage){
+            return pagination.value[pagination.value.length - 1].to;
+        } else {
+            return DataTableSchema.tRows.length
+        }
     }
 
 </script>
@@ -131,12 +172,16 @@
 
         <div class="header_actions" style="margin-bottom: 10px;">
 
+            <div class="h_action">
+                {{ getCount()}} elements
+            </div>
+
             <div class="h_action" v-for="action in DataTableSchema.headerActions">
                 <button :style="`color:${action.colorText}; background:${action.colorBackground}`" @click="action.onClick()"> {{ action.text }} </button>
             </div>
 
             <div class="h_action" v-if="DataTableSchema.search">
-                <input type="text" placeholder="Search">
+                <input type="text" placeholder="Search" v-model="inputSearch">
             </div>
 
         </div>
@@ -166,7 +211,9 @@
             </div>
         </div>
         <div class="pagination_container" v-if="DataTableSchema.perPage">
-            <button v-for="b, i in pagination" @click="setPagination(i)">{{ i + 1 }}</button>
+            <button v-for="b, i in pagination" @click="setPagination(i)"
+                :class="i === paginationSelect ? 'page_button page_button_select' : 'page_button'"
+            >{{ i + 1 }}</button>
         </div>
 
         <div v-if="arrowNavigation && left < 0" class="arrow_navigation-left" @click="moveToLeft()">
@@ -263,6 +310,23 @@
     }
     .arrow_navigation-right{
         right: 0px;
+    }
+
+    .page_button{
+        min-width: 25px;
+        min-height: 25px;
+        border-radius: 5px;
+        border: none;
+        background: rgb(239, 240, 244);
+    }
+
+    .page_button:hover{
+        cursor: pointer;
+    }
+
+    .page_button_select{
+        background: rgb(0, 145, 185);
+        color: white;
     }
 
 </style>
