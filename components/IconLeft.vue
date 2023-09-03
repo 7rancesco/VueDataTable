@@ -9,21 +9,21 @@
 
         <path
             d="M0 50 L100 50"
-            stroke="black"
+            stroke="var(--color)"
             stroke-width="2"
             fill="none"
         ></path>
 
         <path
             d="M0 50 L50 0"
-            stroke="black"
+            stroke="var(--color)"
             stroke-width="2"
             fill="none"
         ></path>
 
         <path
             d="M0 50 L50 100"
-            stroke="black"
+            stroke="var(--color)"
             stroke-width="2"
             fill="none"
         ></path>

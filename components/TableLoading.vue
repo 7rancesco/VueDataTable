@@ -7,22 +7,18 @@
 <div id="loader_container">
     <svg width="200" viewBox="0 0 100 100">
         <path
-            stroke="black"
+            stroke="none"
             stroke-width="1"
             fill="none"
             d="M10 10 L90 10 L90 90 L10 90 Z"
         ></path>
 
-        <rect x="10" y="10" width="40" height="10" fill="white" stroke="black"></rect>
-        <rect x="50" y="10" width="40" height="10" fill="white" stroke="black"></rect>
+        <rect x="10" y="10" width="80" height="10" fill="var(--color)" stroke="none"></rect>
 
-        <rect id="r1" x="10" y="20" width="40" height="10" fill="green"></rect>
-        <rect id="r2" x="10" y="30" width="40" height="10" fill="orange"></rect>
-        <rect id="r3" x="10" y="40" width="40" height="10" fill="pink"></rect>
-        <rect id="r4" x="10" y="50" width="40" height="10" fill="purple"></rect>
-        <rect id="r5" x="10" y="60" width="40" height="10" fill="blue"></rect>
-        <rect id="r6" x="10" y="70" width="40" height="10" fill="yellow"></rect>
-        <rect id="r7" x="10" y="80" width="40" height="10" fill="red"></rect>
+        <rect id="r1" x="10" y="20" width="80" height="10" fill="var(--color)"></rect>
+        <rect id="r2" x="10" y="30" width="80" height="10" fill="var(--border)"></rect>
+        <rect id="r3" x="10" y="40" width="80" height="10" fill="var(--background)"></rect>
+        <rect id="r4" x="10" y="50" width="80" height="10" fill="var(--color)"></rect>
 
     </svg>
     <p>Loading ...</p>
@@ -53,7 +49,6 @@
     @keyframes animate_rect {
         0%{
             transform: translateX(0%) translateY(-10%);
-            width: 0;
             opacity: 0;
         }
         40%{
@@ -67,7 +62,6 @@
         100%{
             transform: translateX(0%) translateY(-10%);
             opacity: 0;
-            width: 85px;
         }
     }
 </style>

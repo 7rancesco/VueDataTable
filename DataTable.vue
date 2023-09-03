@@ -181,7 +181,7 @@
             </div>
 
             <div class="h_action" v-if="DataTableSchema.search">
-                <input type="text" placeholder="Search" v-model="inputSearch">
+                <input class="search_input" type="text" placeholder="Search" v-model="inputSearch">
             </div>
 
         </div>
@@ -265,17 +265,17 @@
     }
 
     .head{
-        box-shadow: -0.5px -0.5px 0px 0.5px rgb(223, 225, 232) inset;
-        background: linear-gradient(180deg, rgb(239, 241, 245), rgb(255, 255, 255));
+        box-shadow: -0.5px -0.5px 0px 0.5px var(--border) inset;
+        background: rgba(39, 48, 61, 0.199);
         font-size: 1.2rem;
         justify-content: center;
     }
     .cell{
-        box-shadow: -0.5px -0.5px 0px 0.5px rgb(202, 207, 213) inset;
+        box-shadow: -0.5px -0.5px 0px 0.5px var(--border) inset;
     }
 
     .tRows_container:nth-child(even){
-        background: linear-gradient(180deg, rgb(239, 241, 245), rgb(255, 255, 255));
+        background: rgba(67, 77, 91, 0.099);
     }
 
     .cellText{
@@ -302,7 +302,7 @@
     .arrow_navigation-left,
     .arrow_navigation-right{
         position: fixed;
-        top: 35vh;
+        top: 17.8vh;
     }
 
     .arrow_navigation-lef{
@@ -317,7 +317,8 @@
         min-height: 25px;
         border-radius: 5px;
         border: none;
-        background: rgb(239, 240, 244);
+        background: rgba(239, 240, 244, 0.106);
+        color: var(--color)
     }
 
     .page_button:hover{
@@ -325,8 +326,18 @@
     }
 
     .page_button_select{
-        background: rgb(0, 145, 185);
+        background: var(--color);
         color: white;
+    }
+
+    .search_input{
+        height: 4vh;
+        width: 15vw;
+        border-radius: 5px;
+        border: solid 1px var(--border);
+        color: var(--color);
+        background: transparent;
+        font-size: 19px;
     }
 
 </style>
