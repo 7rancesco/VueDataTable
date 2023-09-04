@@ -28,7 +28,8 @@ interface DataTable{
     headerActions?: Button[],
     perPage?: number,
     search?: boolean,
-    columnsLength?: number
+    columnsLength?: number,
+    footerText?: string
 }
 
 export const DataTableSchema = reactive<DataTable>({

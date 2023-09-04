@@ -129,10 +129,17 @@
                 createPagination(elements);
                 setPagination(paginationSelect.value)
             }
-            return elements.slice(
-                pagination.value[paginationSelect.value].from, 
-                pagination.value[paginationSelect.value].to
-            );
+            console.log(pagination.value)
+            if(pagination.value.length){
+                return elements.slice(
+                    pagination.value[paginationSelect.value].from, 
+                    pagination.value[paginationSelect.value].to
+                );
+            } else {
+                
+                return elements
+            }
+
         } else {
             if(inputSearch.value){
                 return SearchIn(inputSearch.value, DataTableSchema.tRows)
@@ -155,7 +162,11 @@
 
     const getCount = () => {
         if(DataTableSchema.perPage){
-            return pagination.value[pagination.value.length - 1].to;
+            if(pagination.value.length){
+                return pagination.value[pagination.value.length - 1].to;
+            } else {
+                
+            }
         } else {
             return DataTableSchema.tRows.length
         }
@@ -221,6 +232,9 @@
         </div>
         <div v-if="arrowNavigation && left !== (cWValue *( columnsLength - DataTableSchema.tHead.length))" class="arrow_navigation-right" @click="moveToRight()">
             <IconRight></IconRight>
+        </div>
+        <div v-if="DataTableSchema.footerText" style="text-align: center;">
+            <strong>{{ DataTableSchema.footerText }}</strong>
         </div>
     </div>
 </template>

@@ -13,10 +13,8 @@ export const SearchIn = ( text : string, array : TRow[][] ) => {
         array.forEach(elements => {
             elements.forEach(element => {
                 if(element.formatText){
-                    const content = element.formatText.content;
-                    content.toLowerCase();
+                    const content = element.formatText.content.toLowerCase();
                     const t = text.toLowerCase();
-    
                     const found = content.search(t);
                     if(found >= 0){
                         const isPushed = output.find(e => e === elements);
